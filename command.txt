@@ -1,0 +1,16 @@
+nvcc hello.cpp -o test -I. -I/usr/local/cuda/include -L/usr/local/cuda/lib64 -I/usr/include/opencv -lopencv_dnn -lopencv_ml -lopencv_objdetect -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_videostab -lopencv_calib3d -lopencv_features2d -lopencv_highgui -lopencv_videoio -lopencv_imgcodecs -lopencv_video -lopencv_photo -lopencv_imgproc -lopencv_flann -lopencv_core
+
+
+// More Concise
+nvcc hello.cpp -o test -I. -I/usr/local/cuda/include -I/usr/include/opencv -lopencv_highgui -lopencv_imgproc -lopencv_core
+
+
+// For grayscale screenshot
+nvcc manipulateImage.cpp -o image -I. -I/usr/local/cuda/include -I/usr/include/opencv -lopencv_highgui -lopencv_imgproc -lopencv_core -lopencv_imgcodecs
+
+// For video Feed
+nvcc videoTest.cpp -o video -I. -I/usr/local/cuda/include -I/usr/include/opencv -lopencv_highgui -lopencv_imgproc -lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_video -lopencv_videostab
+
+// For on-Board Camera with Gstreamer
+gst-launch-1.0 nvcamerasrc ! 'video/x-raw(memory:NVMM), width=(int)1920, height=(int)1080, format=(string)I420, framerate=(fraction)60/1' ! nvvidconv ! 'video/x-raw(memory:NVMM), format=(string)I420' ! nvoverlaysink -e
+
