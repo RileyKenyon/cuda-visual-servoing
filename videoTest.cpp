@@ -10,8 +10,8 @@ int main()
   gst =  "nvcamerasrc ! video/x-raw(memory:NVMM), width=(int)1280, height=(int)720, format=(string)I420, framerate=(fraction)30/1 ! 		  nvvidconv flip-method=6 ! video/x-raw, format=(string)I420 ! \
 	  videoconvert ! video/x-raw, format=(string)BGR ! \
 	  appsink";
-  cv::VideoCapture cap(0); // USB Camera
-
+  //cv::VideoCapture cap(0); // USB Camera
+  cv::VideoCapture cap(gst);
   if (!cap.isOpened())
   {
     cout<<"Error getting stream" << endl;
