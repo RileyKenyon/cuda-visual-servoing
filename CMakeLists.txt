@@ -16,12 +16,12 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 # List source
 set(camera_SRC
-    src/camera.cu
+    src/camera.cpp
 )
 
 # List headers
 set (camera_HEADERS
-    include/camera.h
+    include/camera.hpp
     include/config.h
 )
 
@@ -42,11 +42,13 @@ add_executable(cudacv
     src/main.cu
     )
 
-target_link_libraries(cudacv 
+target_link_libraries(camera_lib 
     "${OpenCV_LIBS}" 
-    camera_lib
     )
 
+target_link_libraries(cudacv
+    camera_lib
+)
 # Request that cudacv be built with -std=c++11
 # As this is a public compile feature anything that links to cudacv
 # will also build with -std=c++11
