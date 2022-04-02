@@ -14,6 +14,8 @@ namespace camera
       TegraCamera(const uint32_t width, const uint32_t height, const uint8_t FPS);
       ~TegraCamera();
 
+      void open_gst();
+
     private:
       // Methods
       std::string get_tegra_gst_pipeline();
@@ -21,7 +23,7 @@ namespace camera
       // Member Variables
       const uint32_t mu32_captureWidth = 1920;
       const uint32_t mu32_captureHeight = 1080;
-      const uint32_t mu32_captureFPS = 30;
+      const uint8_t mu8_captureFPS = 30;
   };
 }
 
