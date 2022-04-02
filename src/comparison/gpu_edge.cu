@@ -7,6 +7,7 @@
 
 #define NUM 10000
 #define Frames 120
+
 //GPU KERNELS
 //----------------------------------------------------------------
 __global__ void gpu_grayscale(unsigned char *matA,unsigned char *grayData, int width, int height){
@@ -55,7 +56,12 @@ int main()
   cv::Mat img;
   //img = cv::imread("pineapple.jpeg");
   //cv::VideoCapture cap("example.mp4"); // replace with 1 if using webcam
-  cv::VideoCapture cap(1);
+  // cv::VideoCapture cap(1);
+  const int WIDTH = 960;
+  const int HEIGHT = 616;
+  std::string pipeline = get_tegra_pipeline()
+  cv::VideoCapture cap("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)960, height=(int)616,format=(string)NV12, framerate=(fraction)120/1 ! nvvidconv ! video/x-raw, format=(string)BGRx ! videoconvert !  appsink");
+
   if (!cap.isOpened()){
     printf("Error getting Stream \n");
   }
@@ -105,7 +111,7 @@ int main()
       cudaDeviceSynchronize();
       cv::Mat build(cv::Size(width,height),CV_8UC1,edge);    
       cv::Mat videoFrameGray; // 3 array of grayscale for saving to file
-      cv::cvtColor(build,videoFrameGray,CV_GRAY2BGR);
+      cv::cvtColor(build,videoFrameGray,cv::COLOR_GRAY2BGR);
       writer.write(videoFrameGray);  // write to video file
       cv::imshow("GPU",build);
       c = cv::waitKey(1);
