@@ -23,6 +23,7 @@ set(camera_SRC
 set (camera_HEADERS
     include/camera.hpp
     include/config.h
+    include/errors.h
 )
 
 add_library(camera_lib

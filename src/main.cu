@@ -1,10 +1,14 @@
 #include <stdlib.h>
 #include "config.h"
 #include "camera.hpp"
+#include "errors.h"
 
 
 int main(int argc, char* argv[]) {
     camera::TegraCamera* cam = nullptr;
+    cv::Mat frameIn;
+
+    // Parse input arguments
     if (argc < 2)
     {
         cam = new camera::TegraCamera();
@@ -25,14 +29,12 @@ int main(int argc, char* argv[]) {
         std::cout << argv[0] << " Version " << VisualServoing_VERSION_MAJOR << "."
                   << VisualServoing_VERSION_MINOR << std::endl;
         std::cout << "Usage: " << argv[0] << " number" << std::endl;
-        return -1;
+        return is_errors::ARG_ERR;
     }
 
     // Video Capture
     cam->open_gst();
-    cv::Mat frameIn;
-
-    for(;;)
+    while(cam->isOpened())
     {
         // error handling
         if (!cam->read(frameIn)) {
@@ -51,5 +53,5 @@ int main(int argc, char* argv[]) {
     }
     cam->release();
     delete cam;
-    return 0;
+    return is_errors::NO_ERR;
 }
