@@ -15,9 +15,9 @@ int main(int argc, char* argv[]) {
     } 
     else if (4 == argc)
     {
-        uint32_t u32_width = (uint32_t) std::atoi(argv[1]);
-        uint32_t u32_height = (uint32_t) std::atoi(argv[2]);
-        uint8_t u8_fps = (uint8_t) std::atoi(argv[3]);
+        uint32_t u32_width = static_cast<uint32_t>(std::atoi(argv[1]));
+        uint32_t u32_height = static_cast<uint32_t>(std::atoi(argv[2]));
+        uint8_t u8_fps = static_cast<uint32_t>(std::atoi(argv[3]));
         std::cout << "Width: " << std::to_string(u32_width) << std::endl;
         std::cout << "Height: " << std::to_string(u32_height) << std::endl;
         std::cout << "FPS: " << std::to_string(u8_fps) << std::endl;
