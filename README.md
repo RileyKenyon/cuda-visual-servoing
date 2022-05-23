@@ -8,3 +8,6 @@ mkdir build && cd build
 cmake ../
 cmake --build .
 ```
+
+Reference documentation for using CMake with CUDA:
+https://developer.nvidia.com/blog/building-cuda-applications-cmake/

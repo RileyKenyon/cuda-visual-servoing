@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-project(VisualServoing LANGUAGES CXX CUDA VERSION 1.0)
+project(Camera LANGUAGES CXX CUDA VERSION 1.0)
 
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 11)

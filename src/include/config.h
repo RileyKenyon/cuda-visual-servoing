@@ -1,3 +1,3 @@
 // define the version
-#define VisualServoing_VERSION_MAJOR 1
-#define VisualServoing_VERSION_MINOR 0
+#define VisualServoing_VERSION_MAJOR 
+#define VisualServoing_VERSION_MINOR 

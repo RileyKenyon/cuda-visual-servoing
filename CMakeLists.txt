@@ -17,6 +17,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # Add subdirectories
 add_subdirectory(
     src/camera
+    src/imageProcessing
     )
 
 # Target
