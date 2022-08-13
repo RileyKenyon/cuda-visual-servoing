@@ -15,16 +15,6 @@ int main(int argc, char* argv[]) {
     {
         cam = new camera::GenericCamera();
     } 
-    else if (4 == argc)
-    {
-        uint32_t u32_width = static_cast<uint32_t>(std::atoi(argv[1]));
-        uint32_t u32_height = static_cast<uint32_t>(std::atoi(argv[2]));
-        uint8_t u8_fps = static_cast<uint32_t>(std::atoi(argv[3]));
-        std::cout << "Width: " << std::to_string(u32_width) << std::endl;
-        std::cout << "Height: " << std::to_string(u32_height) << std::endl;
-        std::cout << "FPS: " << std::to_string(u8_fps) << std::endl;
-        cam = new camera::GenericCamera(u32_width, u32_height, u8_fps);
-    }
     else
     {
         // report out the version
@@ -37,7 +27,6 @@ int main(int argc, char* argv[]) {
     // Video Capture
     if (cam != nullptr)
     {
-        cam->open_gst();
         while(cam->isOpened())
         {
             // error handling

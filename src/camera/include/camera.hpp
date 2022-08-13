@@ -11,14 +11,11 @@ namespace camera
   {
     public:
       GenericCamera();
-      GenericCamera(const uint32_t width, const uint32_t height, const uint8_t FPS);
       ~GenericCamera();
-
-      void open_gst();
 
     private:
       // Methods
-      std::string get_tegra_gst_pipeline();
+      std::string get_tegra_gst_pipeline_str();
 
       // Member Variables
       const uint32_t mu32_captureWidth = 1920;
