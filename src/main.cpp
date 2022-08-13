@@ -7,13 +7,13 @@
 
 
 int main(int argc, char* argv[]) {
-    camera::TegraCamera* cam = nullptr;
+    camera::GenericCamera* cam = nullptr;
     cv::Mat frameIn;
 
     // Parse input arguments
     if (argc < 2)
     {
-        cam = new camera::TegraCamera();
+        cam = new camera::GenericCamera();
     } 
     else if (4 == argc)
     {
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
         std::cout << "Width: " << std::to_string(u32_width) << std::endl;
         std::cout << "Height: " << std::to_string(u32_height) << std::endl;
         std::cout << "FPS: " << std::to_string(u8_fps) << std::endl;
-        cam = new camera::TegraCamera(u32_width, u32_height, u8_fps);
+        cam = new camera::GenericCamera(u32_width, u32_height, u8_fps);
     }
     else
     {

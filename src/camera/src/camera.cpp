@@ -2,26 +2,26 @@
 
 namespace camera
 {
-  TegraCamera::TegraCamera()
+  GenericCamera::GenericCamera()
   {
   }
 
-  TegraCamera::TegraCamera(const uint32_t width, const uint32_t height, const uint8_t FPS)
+  GenericCamera::GenericCamera(const uint32_t width, const uint32_t height, const uint8_t FPS)
     : mu32_captureWidth(width)
     , mu32_captureHeight(height)
     , mu8_captureFPS(FPS)
   {
   }
   
-  TegraCamera::~TegraCamera() = default;
+  GenericCamera::~GenericCamera() = default;
 
-  void TegraCamera::open_gst()
+  void GenericCamera::open_gst()
   {
     std::string handle = get_tegra_gst_pipeline();
     this->open(handle);
   }
 
-  std::string TegraCamera::get_tegra_gst_pipeline()
+  std::string GenericCamera::get_tegra_gst_pipeline()
   {
       return ("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)" + std::to_string(mu32_captureWidth) + \
         ", height=(int)" + std::to_string(mu32_captureHeight) + ",format=(string)NV12, \

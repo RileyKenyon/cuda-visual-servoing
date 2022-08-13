@@ -7,12 +7,12 @@
 
 namespace camera
 {
-  class TegraCamera : public cv::VideoCapture
+  class GenericCamera : public cv::VideoCapture
   {
     public:
-      TegraCamera();
-      TegraCamera(const uint32_t width, const uint32_t height, const uint8_t FPS);
-      ~TegraCamera();
+      GenericCamera();
+      GenericCamera(const uint32_t width, const uint32_t height, const uint8_t FPS);
+      ~GenericCamera();
 
       void open_gst();
 
