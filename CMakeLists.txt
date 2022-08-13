@@ -23,19 +23,15 @@ configure_file(
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-# Add dependencies for opencv
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
-
 # Add subdirectories
 add_subdirectory(
     src/camera
-    src/imageProcessing
+    # src/imageProcessing
 )
 
 # Target
 add_executable(cudacv
-    src/main.cu
+    src/main.cpp
 )
 
 # Add binary tree to search path for include files
@@ -49,6 +45,7 @@ target_link_libraries(cudacv
     camera_lib
 )
 
+# Add dependencies for opencv
 target_link_libraries(cudacv
     ${CONAN_LIBS}
 )

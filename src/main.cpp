@@ -2,6 +2,8 @@
 #include "config.h"
 #include "camera.hpp"
 #include "errors.h"
+#include <opencv2/opencv.hpp>
+#include <opencv2/videoio.hpp>
 
 
 int main(int argc, char* argv[]) {
@@ -33,25 +35,29 @@ int main(int argc, char* argv[]) {
     }
 
     // Video Capture
-    cam->open_gst();
-    while(cam->isOpened())
+    if (cam != nullptr)
     {
-        // error handling
-        if (!cam->read(frameIn)) {
-            std::cout<<"Capture read error"<<std::endl;
-            break;
-        }
-
-        // show the image
-        else {
-            cv::imshow("MyCameraPreview",frameIn);
-            if(cv::waitKey(1) >= 0){
-                printf("Exiting.");
+        cam->open_gst();
+        while(cam->isOpened())
+        {
+            // error handling
+            if (!cam->read(frameIn)) {
+                std::cout<<"Capture read error"<<std::endl;
                 break;
             }
-        } 
+
+            // show the image
+            else {
+                cv::imshow("MyCameraPreview",frameIn);
+                if(cv::waitKey(1) >= 0){
+                    printf("Exiting.");
+                    break;
+                }
+            } 
+        }
+        cam->release();
+        delete cam;
     }
-    cam->release();
-    delete cam;
+  
     return is_errors::NO_ERR;
 }
