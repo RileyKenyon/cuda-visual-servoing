@@ -1,29 +1,38 @@
-cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-project(VisualServoing LANGUAGES CXX CUDA VERSION 1.0)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+project(VisualServoing LANGUAGES CXX VERSION 1.0)
 
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Enable CUDA if available
+include(CheckLanguage)
+check_language(CUDA)
+if (DEFINED CMAKE_CUDA_COMPILER)
+    # enable_language(CUDA)
+else()
+    message(STATUS "No CUDA support")
+endif()
+
 configure_file(
     "${PROJECT_SOURCE_DIR}/include/config.h.in"
     "${PROJECT_BINARY_DIR}/include/config.h"
-    )
+)
 
-# Add dependencies for opencv
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
+# Setup with conan
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 # Add subdirectories
 add_subdirectory(
     src/camera
-    src/imageProcessing
-    )
+    # src/imageProcessing
+)
 
 # Target
 add_executable(cudacv
-    src/main.cu
-    )
+    src/main.cpp
+)
 
 # Add binary tree to search path for include files
 target_include_directories(cudacv 
@@ -34,6 +43,11 @@ target_include_directories(cudacv
 
 target_link_libraries(cudacv
     camera_lib
+)
+
+# Add dependencies for opencv
+target_link_libraries(cudacv
+    ${CONAN_LIBS}
 )
 
 # Request that cudacv be built with -std=c++11
@@ -50,7 +64,7 @@ set_target_properties(cudacv
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-    )
+)
 
 # include(CTest)
 

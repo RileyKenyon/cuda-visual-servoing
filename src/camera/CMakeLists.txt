@@ -1,19 +1,25 @@
 cmake_minimum_required(VERSION 3.8 FATAL_ERROR)
-project(Camera LANGUAGES CXX CUDA VERSION 1.0)
+project(Camera LANGUAGES CXX VERSION 1.0)
 
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Enable CUDA if able
+include(CheckLanguage)
+check_language(CUDA)
+if (NOT DEFINED CMAKE_CUDA_COMPILER)
+else()
+    # enable_language(CUDA)
+endif()
 
 configure_file(
     "${PROJECT_SOURCE_DIR}/../../include/config.h.in"
     "${PROJECT_BINARY_DIR}/../../include/config.h"
     )
-
-# Add dependencies for opencv
-find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
+# Setup with conan
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 # List source
 set(camera_SRC
@@ -33,8 +39,9 @@ add_library(camera_lib
     "${camera_HEADERS}"
 )
 
-target_link_libraries(camera_lib 
-    "${OpenCV_LIBS}" 
+# Add dependencies for opencv from conan
+target_link_libraries(camera_lib
+    ${CONAN_LIBS}
     )
 
 # Add binary tree to search path for include files
