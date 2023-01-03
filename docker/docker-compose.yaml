@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  cuda-devel:
+    build: .
+    image: image.local/cuda:cuda-base
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    network_mode: host
+    volumes:
+      - ${REPO_ROOT}:/root/repo
+    working_dir: /root/repo
