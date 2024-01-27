@@ -4,5 +4,7 @@ RUN apt-get update
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y install \
     build-essential \
-    cmake
+    vim \
+    cmake \
+    libopencv-dev
 ENTRYPOINT ["tail","-f","/dev/null"]
