@@ -3,3 +3,4 @@
 **/.env
 build
 test_package
+include/config.h
