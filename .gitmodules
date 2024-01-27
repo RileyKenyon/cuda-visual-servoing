@@ -1,0 +1,3 @@
+[submodule "extern/scrcpy"]
+	path = extern/scrcpy
+	url = git@github.com:Genymobile/scrcpy.git

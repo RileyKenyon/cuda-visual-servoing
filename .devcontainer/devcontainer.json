@@ -1,0 +1,23 @@
+{
+  "name": "vservo-dev",
+  "dockerComposeFile": [
+    "../docker/docker-compose.yaml"
+  ],
+  "service": "devel",
+  "workspaceFolder": "/app",
+  "remoteUser": "dev",
+  "remoteEnv": {
+    "SCRCPY_SERVER_PATH": "${containerWorkspaceFolder}/extern/scrcpy-server"
+  },
+  "containerEnv": {
+    "DISPLAY": ":1"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anysphere.cpptools",
+        "anysphere.cursorpyright"
+      ]
+    }
+  }
+}

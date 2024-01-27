@@ -2,4 +2,9 @@
 .venv
 **/.env
 build
+install
 test_package
+**/config.h
+output
+*.mp4
+*.avi

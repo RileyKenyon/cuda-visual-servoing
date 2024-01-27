@@ -1,5 +1,10 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-project(VisualServoing LANGUAGES CXX VERSION 1.0)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
+project(VServo 
+    VERSION 1.0
+    LANGUAGES C CXX 
+    DESCRIPTION "Library for visual servoing accelerated with CUDA")
+
+include(GNUInstallDirs)
 
 # Set the C++ standard
 set(CMAKE_CXX_STANDARD 11)
@@ -8,62 +13,44 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Enable CUDA if available
 include(CheckLanguage)
 check_language(CUDA)
+find_package(CUDAToolkit REQUIRED)
 if (DEFINED CMAKE_CUDA_COMPILER)
-    # enable_language(CUDA)
+    enable_language(CUDA)
 else()
     message(STATUS "No CUDA support")
 endif()
 
-configure_file(
-    "${PROJECT_SOURCE_DIR}/include/config.h.in"
-    "${PROJECT_BINARY_DIR}/include/config.h"
-)
-
-# Setup with conan
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+# Find OpenCV
+find_package(OpenCV REQUIRED)
 
 # Add subdirectories
-add_subdirectory(
-    src/camera
-    # src/imageProcessing
+add_subdirectory(extern)
+add_subdirectory(src/config)
+add_subdirectory(src/image_processing)
+add_subdirectory(src/sinks)
+
+add_subdirectory(apps/examples)
+add_subdirectory(apps/piano_tiles)
+
+# Export
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
 )
 
-# Target
-add_executable(cudacv
-    src/main.cpp
+install(EXPORT ${PROJECT_NAME}Targets
+        FILE ${PROJECT_NAME}Targets.cmake
+        NAMESPACE vservo::
+        DESTINATION lib/cmake/${PROJECT_NAME}
 )
 
-# Add binary tree to search path for include files
-target_include_directories(cudacv 
-    PUBLIC "${PROJECT_BINARY_DIR}/include"
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
-)
-
-
-target_link_libraries(cudacv
-    camera_lib
-)
-
-# Add dependencies for opencv
-target_link_libraries(cudacv
-    ${CONAN_LIBS}
-)
-
-# Request that cudacv be built with -std=c++11
-# As this is a public compile feature anything that links to cudacv
-# will also build with -std=c++11
-target_compile_features(cudacv PUBLIC cxx_std_11)
-
-# We need to explicitly state that we need all CUDA files in the cudacv
-# library to be built with -dc as the member functions could be called by
-# other libraries and executables
-set_target_properties(cudacv
-    PROPERTIES 
-    CUDA_SEPARABLE_COMPILATION ON
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+# Configure and install package finding
+configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION lib/cmake/${PROJECT_NAME}
 )
 
 # include(CTest)
@@ -73,7 +60,7 @@ set_target_properties(cudacv
 #   add_executable(particle_test test.cu)
 
 #   set_target_properties(particle_test PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-#   target_link_libraries(particle_test PRIVATE cudacv)
+#   target_link_libraries(particle_test PRIVATE CameraApp)
 
 #   add_test(NAME camera_10k COMMAND particle_test 10000 )
 #   add_test(NAME camera_256k COMMAND particle_test 256000 )

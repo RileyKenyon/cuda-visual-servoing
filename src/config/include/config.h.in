@@ -1,0 +1,16 @@
+///-----------------------------------------------------------------------------
+/// @file config.h
+///
+/// @author Riley Kenyon (rike2277@colorado.edu)
+/// @brief Configuration for vservo
+///
+/// @date 2024-02-17
+///-----------------------------------------------------------------------------
+// define the version
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define VSERVO_VERSION_MAJOR @VServo_VERSION_MAJOR@
+#define VSERVO_VERSION_MINOR @VServo_VERSION_MINOR@
+
+#endif // CONFIG_H

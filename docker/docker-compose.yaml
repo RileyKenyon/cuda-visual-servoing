@@ -1,8 +1,10 @@
-version: "3.9"
+name: cuda
 services:
-  cuda-devel:
-    build: .
-    image: image.local/cuda:cuda-base
+  devel:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+      target: builder
     deploy:
       resources:
         reservations:
@@ -11,6 +13,13 @@ services:
               count: 1
               capabilities: [ gpu ]
     network_mode: host
+    stdin_open: true
+    tty: true
     volumes:
-      - ${REPO_ROOT}:/root/repo
-    working_dir: /root/repo
+      - ../:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=:1
+    working_dir: /app
+    devices:
+      - /dev/video0:/dev/video0
