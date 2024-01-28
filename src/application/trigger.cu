@@ -9,24 +9,6 @@
 #define NUM 10000
 #define Frames 120
 #define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
-// GPU KERNELS
-//----------------------------------------------------------------
-__global__ void dilate(unsigned char *image, int width, int height) {
-  int tid, stride;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-  while (tid < (width - 1) * height && tid > width) {
-    if (image[tid] == 255 && image[tid - width] == 0 && image[tid + width] == 0) {
-      image[tid - width] = 255; // set pixel above below left and right to white
-      image[tid + width] = 255;
-      image[tid - 1] = 255;
-      image[tid - 2] = 255;
-      image[tid + 1] = 255;
-      image[tid + 2] = 255;
-    }
-    tid = tid + stride;
-  }
-}
 // DRAWING FUNCTION
 void drawCircle(cv::Mat img, cv::Point center) {
   cv::circle(img, center, 10, cv::Scalar(0, 255, 0), cv::FILLED, cv::LINE_8);

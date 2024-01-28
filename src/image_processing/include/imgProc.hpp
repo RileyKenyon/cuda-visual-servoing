@@ -69,4 +69,11 @@ __global__ void spacing(const unsigned char *pixelData,
 /// @param width Width of the image
 /// @param height Height of the image
 __global__ void spacing(const unsigned char *pixelData, int width, int height);
+
+/// @brief Perform a dilate operation on the image
+/// @param[in] image input image
+/// @param width Width of the image
+/// @param height Height of the image
+__global__ void dilate(unsigned char *image, int width, int height);
+
 #endif // IMGPROC_HPP

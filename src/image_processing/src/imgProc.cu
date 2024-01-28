@@ -131,6 +131,7 @@ __global__ void spacing(const unsigned char *pixelData,
 __global__ void spacing(const unsigned char *pixelData, int width, int height) {
   int tid = blockIdx.x * blockDim.x + threadIdx.x;
   int stride = blockDim.x * gridDim.x;
+  int difference = 0;
   if (tid < width * height) {
     if (pixelData[tid] == 255) {
       int init = tid;
@@ -138,7 +139,7 @@ __global__ void spacing(const unsigned char *pixelData, int width, int height) {
       // looking below by up to 20 pixels
       while (tid < width * height && tid < init + width * 50) {
         if (255 - pixelData[tid] == 0) {
-          int difference = (tid - init) / width;
+          difference = (tid - init) / width;
           printf("%d  ", difference);
           break;
         }
@@ -148,5 +149,21 @@ __global__ void spacing(const unsigned char *pixelData, int width, int height) {
     } else {
       difference = 0;
     }
+  }
+}
+
+__global__ void dilate(unsigned char *image, int width, int height) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  int stride = blockDim.x * gridDim.x;
+  while (tid < (width - 1) * height && tid > width) {
+    if (image[tid] == 255 && image[tid - width] == 0 && image[tid + width] == 0) {
+      image[tid - width] = 255; // set pixel above below left and right to white
+      image[tid + width] = 255;
+      image[tid - 1] = 255;
+      image[tid - 2] = 255;
+      image[tid + 1] = 255;
+      image[tid + 2] = 255;
+    }
+    tid = tid + stride;
   }
 }
