@@ -8,92 +8,54 @@
 
 #define NUM 10000
 #define Frames 120
-// GPU KERNELS
-//----------------------------------------------------------------
-__global__ void spacing(unsigned char *pixelData, int width, int height) {
-  int tid, stride, difference;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-  if (tid < width * height) {
-    if (pixelData[tid] == 255) {
-      int init = tid;
-      tid = init + 10 * width;
-      // looking below by up to 20 pixels
-      while (tid < width * height && tid < init + width * 50) {
-        if (255 - pixelData[tid] == 0) {
-          difference = (tid - init) / width;
-          printf("%d  ", difference);
-          break;
-        }
-        tid = tid + width;
-        difference = 0;
-      }
-    } else {
-      difference = 0;
-    }
-  }
-}
-// MAIN FUNCTION
-//-----------------------------------------------------------------
-// using namespace cv;
-int main() {
+static constexpr unsigned int numThreads = 1024; // good number for multiple of 32
+
+int main(int argc, char const *argv[]) {
   // Initialize timer settings
   float calcTimer = 0;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
-  // float GPUtimer, CPUtimer;
 
   // ORIGINAL IMAGE
   //-------------------------------------------------------------------
   // Get initial image and print
   cv::Mat img;
-  // img = cv::imread("pineapple.jpeg");
-  cv::VideoCapture cap("color.avi");
-  // cv::VideoCapture cap(1); // webcam
-  if (!cap.isOpened()) {
-    printf("Error getting Stream \n");
+  if (arc == 2) {
+    std::string fname = argv[1];
+    if (fname.ends_with(".avi")) { // c++20
+      cv::VideoCapture cap(fname);
+      if (!cap.isOpened()) {
+        std::runtime_error("Error getting Stream")
+      }
+      cap >> img;
+    } else if (fname.ends_with(".jpeg")) {
+      img = cv::imread(fname);
+    }
   }
-  cap >> img;
-  // cv::imshow("original",img);
-  // cv::waitKey(0);
-  int imageWidth = img.cols;
-  int imageHeight = img.rows;
-  printf("Resolution: %d x %d \n", imageWidth, imageHeight);
+  if (img.empty()) {
+    cv::VideoCapture cap(1); // webcam
+    if (!cap.isOpened()) {
+      std::runtime_error("Error getting Stream")
+    }
+    cap >> img;
+  }
+  cv::imshow("original", img);
+  cv::waitKey(0);
+
+  const int imageWidth = img.cols;
+  const int imageHeight = img.rows;
+
   // Do some ROI and calibration to select screen size
   cv::Rect2d r = cv::selectROI(img);
-  int width = r.width;
-  int height = r.height;
-  // unsigned char *screenData = (unsigned char *) malloc(width*height*sizeof(unsigned char));
+  const int width = r.width;
+  const int height = r.height;
 
-  unsigned int numThreads, numBlocksImage, numBlocksScreen;
-  numThreads = 1024; // good number for multiple of 32
-  numBlocksImage = (imageWidth * imageHeight + numThreads - 1) / numThreads;
-  numBlocksScreen = (width * height + numThreads - 1) / numThreads;
-  /** Write to file
-    std::ofstream dataFile;
-    dataFile.open ("output.txt");
-    for (int k = 0; k<3; k++){
-      for (int j = 100*(k+1)*width; j<((100*(k+1))+1)*width; j++){
-         int output = lineData[j] - '0';
-         dataFile << output;
-         if (j != ((100*(k+1))+1)*width-1){ //last element in row
-           dataFile << ",";
-         }
-         lineData[j] = 0;
-      }
-    dataFile << "\n";
-    }
-    dataFile.close();
-    **/
+  unsigned int numBlocksImage = (imageWidth * imageHeight + numThreads - 1) / numThreads;
+  unsigned int numBlocksScreen = (width * height + numThreads - 1) / numThreads;
+
   // SETUP SETTINGS
   //-------------------------------------------------------------------
-  // Configure blocks and threads for GPU
-  /**
-  unsigned int numThreads, numBlocks;
-  numThreads = 1024; // good number for multiple of 32
-  numBlocks = (width*height + numThreads - 1)/numThreads;
-  **/
   // Allocate device and host
   unsigned char *matA, *screenData, *grayData, *edge, *prevArr, *output;
   int *imageInfo, *screenInfo;
@@ -113,8 +75,9 @@ int main() {
   int screenInfoHost[4] = {r.x, r.y, r.width, r.height};
   cudaMemcpy(imageInfo, imageInfoHost, 2 * sizeof(int), cudaMemcpyHostToDevice);   // FOR COPYING ARRAY
   cudaMemcpy(screenInfo, screenInfoHost, 4 * sizeof(int), cudaMemcpyHostToDevice); // FOR COPYING ARRAY
-  printf("Size of image: %d, %d \n", imageInfo[0], imageInfo[1]);
-  printf("Size of ROI: %d,%d,%d,%d \n", screenInfo[0], screenInfo[1], screenInfo[2], screenInfo[3]);
+  std::cout << "Size of image: " << imageInfo[0] << ", " << imageInfo[1] << std::endl;
+  std::cout << "Size of ROI: " << screenInfo[0] << ", " << screenInfo[1] << ", " << screenInfo[2] << ", "
+            << screenInfo[3] << std::endl;
   cudaMemcpy(matA,
              img.data,
              imageWidth * imageHeight * 3 * sizeof(unsigned char),

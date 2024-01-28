@@ -9,16 +9,15 @@
 #define NUM 10000
 #define Frames 120
 #define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
-// MAIN FUNCTION
-//-----------------------------------------------------------------
-// using namespace cv;
-int main() {
+
+static constexpr unsigned int numThreads = 1024; // good number for multiple of 32
+
+int main(int argc, char const *argv[]) {
   // Initialize timer settings
   float calcTimer = 0;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
-  // float GPUtimer, CPUtimer;
 
   // ORIGINAL IMAGE
   //-------------------------------------------------------------------
@@ -27,26 +26,28 @@ int main() {
   // img = cv::imread("pineapple.jpeg");
   cv::VideoCapture cap("color.avi");
   // cv::VideoCapture cap(1); // webcam
+
   if (!cap.isOpened()) {
     printf("Error getting Stream \n");
   }
   cap >> img;
+
   int imageWidth = img.cols;
   int imageHeight = img.rows;
   // cv::imshow("original",img);
   // cv::waitKey(0);
-  printf("Resolution: %d x %d \n", imageWidth, imageHeight);
+  std::cout << "Resolution: " << imageWidth << "x" << imageHeight << std::endl;
+
   // Do some ROI and calibration to select screen size
   cv::Rect2d r = cv::selectROI(img);
   int width = r.width;
   int height = r.height;
   // unsigned char *screenData = (unsigned char *) malloc(width*height*sizeof(unsigned char));
 
-  unsigned int numThreads, numBlocksImage, numBlocksScreen;
-  numThreads = 1024; // good number for multiple of 32
-  numBlocksImage = (imageWidth * imageHeight + numThreads - 1) / numThreads;
-  numBlocksScreen = (width * height + numThreads - 1) / numThreads;
-  printf("Number of Blocks Cropped: %d	", numBlocksScreen);
+  unsigned int numBlocksImage = (imageWidth * imageHeight + numThreads - 1) / numThreads;
+  unsigned int numBlocksScreen = (width * height + numThreads - 1) / numThreads;
+  std::cout << "Number of Blocks Cropped: " << numBlocksScreen << std::endl;
+
   /** Write to file
     std::ofstream dataFile;
     dataFile.open ("output.txt");
@@ -93,8 +94,9 @@ int main() {
   int screenInfoHost[4] = {r.x, r.y, r.width, r.height};
   cudaMemcpy(imageInfo, imageInfoHost, 2 * sizeof(int), cudaMemcpyHostToDevice);   // FOR COPYING ARRAY
   cudaMemcpy(screenInfo, screenInfoHost, 4 * sizeof(int), cudaMemcpyHostToDevice); // FOR COPYING ARRAY
-  printf("Size of image: %d, %d \n", imageInfo[0], imageInfo[1]);
-  printf("Size of ROI: %d,%d,%d,%d \n", screenInfo[0], screenInfo[1], screenInfo[2], screenInfo[3]);
+  std::cout << "Size of image: " << imageInfo[0] << ", " << imageInfo[1] << std::endl;
+  std::cout << "Size of ROI: " << screenInfo[0] << ", " << screenInfo[1] << ", " << screenInfo[2] << ", "
+            << screenInfo[3] << std::endl;
   cudaMemcpy(matA,
              img.data,
              imageWidth * imageHeight * 3 * sizeof(unsigned char),
