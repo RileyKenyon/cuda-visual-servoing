@@ -10,7 +10,7 @@ target_include_directories(CameraApp
 )
 
 # Link example to the camera library
-target_link_libraries(CameraApp camera_lib)
+target_link_libraries(CameraApp PUBLIC cvs::camera_lib opencv_highgui)
 
 # Request that CameraApp be built with -std=c++11
 # As this is a public compile feature anything that links to CameraApp
@@ -23,7 +23,7 @@ target_compile_features(CameraApp PUBLIC cxx_std_11)
 set_target_properties(CameraApp
     PROPERTIES 
     CUDA_SEPARABLE_COMPILATION ON
-    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+    ARCHIVE_OUTPUT_DIRECTORY lib
+    LIBRARY_OUTPUT_DIRECTORY lib
+    RUNTIME_OUTPUT_DIRECTORY bin
 )

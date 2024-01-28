@@ -26,14 +26,50 @@ configure_file(
 )
 
 add_library(AppConfig INTERFACE)
+add_library(cvs::AppConfig ALIAS AppConfig)
+
+# Set public headers
+set(CONFIG_HEADERS
+    include/config.h
+    include/errors.h
+)
+
 target_include_directories(AppConfig INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+set_target_properties(AppConfig PROPERTIES
+    PUBLIC_HEADER "${CONFIG_HEADERS}"
+)
+
+install(TARGETS AppConfig
+    EXPORT ${PROJECT_NAME}Targets
+    LIBRARY DESTINATION  lib
+    ARCHIVE DESTINATION  lib
+    RUNTIME DESTINATION  bin
+    INCLUDES DESTINATION include
 )
 
 # Add subdirectories
 add_subdirectory(src/camera)
 add_subdirectory(examples)
+
+
+# Export
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${PROJECT_NAME}ConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion
+)
+
+install(EXPORT ${PROJECT_NAME}Targets
+        FILE ${PROJECT_NAME}Targets.cmake
+        NAMESPACE cvs::
+        DESTINATION lib/cmake/${PROJECT_NAME}
+)
+
 
 # include(CTest)
 
