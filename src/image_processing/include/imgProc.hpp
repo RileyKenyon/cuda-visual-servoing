@@ -22,4 +22,14 @@ void convert_grayscale_cpu(const cv::Mat *img, cv::Mat *grayscale);
 /// @param height Height of the image
 __global__ void gpu_grayscale(const unsigned char *matA, unsigned char *matG, int width, int height);
 
+/// @brief Allocate the screen
+/// @param[in] originalImage The original image
+/// @param[out] screenImage The output screen
+/// @param[in] imageInfo Information regarding the image
+/// @param[in] screenInfo Information regarding the screen
+__global__ void screenAllocate(const unsigned char *originalImage,
+                               unsigned char *screenImage,
+                               const int *imageInfo,
+                               const int *screenInfo);
+
 #endif // IMGPROC_HPP

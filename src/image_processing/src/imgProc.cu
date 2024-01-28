@@ -24,11 +24,28 @@ __global__ void gpu_grayscale(const unsigned char *mat, unsigned char *matG, int
   // grayscale calculation with strides
   while (tid < width * height) {
     matG[tid] = mat[3 * tid] * 0.07 + mat[3 * tid + 1] * 0.72 + mat[3 * tid + 2] * 0.21;
-    // if (matG[tid] > 170) { // saturate to either 255 or 0 - for pixel testing
-    //   matG[tid] = 255;
-    // } else {
-    //   matG[tid] = 0;
-    // }
+    tid = tid + stride;
+  }
+}
+
+__global__ void screenAllocate(unsigned char *originalImage,
+                               unsigned char *screenImage,
+                               int *imageInfo,
+                               int *screenInfo) {
+  // Distance between array elements (i,j)[0] to (i,j)[1] is 1 not width*height
+  // thread ID
+  int imageWidth = imageInfo[0];
+  int imageHeight = imageInfo[1];
+  int screenX = screenInfo[0];
+  int screenY = screenInfo[1];
+  int screenWidth = screenInfo[2];
+  int screenHeight = screenInfo[3];
+  int index = 0;
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  int stride = blockDim.x * gridDim.x;
+  while (tid < screenWidth * screenHeight) {
+    index = imageWidth * (screenY + tid / screenWidth) + screenX + (tid - screenWidth * (tid / screenWidth));
+    screenImage[tid] = originalImage[index];
     tid = tid + stride;
   }
 }

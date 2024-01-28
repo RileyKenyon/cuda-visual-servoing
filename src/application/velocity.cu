@@ -11,47 +11,6 @@
 // GPU KERNELS
 //----------------------------------------------------------------
 
-__global__ void screenAllocate(unsigned char *originalImage,
-                               unsigned char *screenImage,
-                               int *imageInfo,
-                               int *screenInfo) {
-  // Distance between array elements (i,j)[0] to (i,j)[1] is 1 not width*height
-  // thread ID
-  int imageWidth, imageHeight;
-  imageWidth = imageInfo[0];
-  imageHeight = imageInfo[1];
-
-  int screenX, screenY, screenWidth, screenHeight;
-  screenX = screenInfo[0];
-  screenY = screenInfo[1];
-  screenWidth = screenInfo[2];
-  screenHeight = screenInfo[3];
-  // printf("Size of image: %d, %d \n",imageWidth,imageHeight);
-  // printf("Size of ROI: %d,%d,%d,%d \n",screenX,screenY,screenWidth,screenHeight);
-  int tid, stride, index;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-  while (tid < screenWidth * screenHeight) {
-    index = imageWidth * (screenY + tid / screenWidth) + screenX + (tid - screenWidth * (tid / screenWidth));
-    screenImage[tid] = originalImage[index];
-    // printf("Screen Index: %d , Image Index %d\n",tid, index);
-    tid = tid + stride;
-  }
-
-  /**
-    for (int y =screenY; y < (screenY + screenHeight); y++){
-       for (int x = screenX; x< (screenX + screenWidth); x++){
-       int index = (y*screenWidth+x) - (screenY*screenWidth + screenX);
-       int roi = y*imageWidth + x;
-       //printf("new Mat: %d Old Mat: %d\n",index,roi);
-       printf("width: %d height: %d\n",screenWidth,screenHeight);
-       printf("y_initial: %d x_initial: %d\n",screenY,screenX);
-       //screenImage[index] = originalImage[roi]; // cropped version of the original image with roi
-       }
-     }
-  **/
-}
-
 __global__ void edgeFind(unsigned char *grayData, unsigned char *edge, int width, int height) {
   int tid, stride;
   tid = blockIdx.x * blockDim.x + threadIdx.x;
