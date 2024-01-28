@@ -1,3 +1,4 @@
+#include "imgProc.hpp"
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 #include <iostream>
@@ -50,18 +51,6 @@ __global__ void screenAllocate(unsigned char *originalImage,
        }
      }
   **/
-}
-
-__global__ void gpu_grayscale(unsigned char *matA, unsigned char *grayData, int width, int height) {
-  // Distance between array elements (i,j)[0] to (i,j)[1] is 1 not width*height
-  // thread ID
-  int tid, stride;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-  while (tid < width * height) {
-    grayData[tid] = matA[3 * tid] * 0.07 + matA[3 * tid + 1] * 0.72 + matA[3 * tid + 2] * 0.21;
-    tid = tid + stride;
-  }
 }
 
 __global__ void edgeFind(unsigned char *grayData, unsigned char *edge, int width, int height) {

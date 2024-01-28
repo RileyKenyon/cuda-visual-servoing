@@ -1,3 +1,4 @@
+#include "imgProc.hpp"
 #include <cuda.h>
 #include <cuda_runtime_api.h>
 #include <iostream>
@@ -7,29 +8,6 @@
 
 #define NUM 10000
 #define Frames 120
-// GPU KERNEL
-//----------------------------------------------------------------
-__global__ void gpu_grayscale(unsigned char *matA, unsigned char *grayData, int width, int height) {
-  // Distance between array elements (i,j)[0] to (i,j)[1] is 1 not width*height
-  // thread ID
-  int tid;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-
-  // stride lengths
-  int stride;
-  stride = blockDim.x * gridDim.x;
-
-  // grayscale calculation with strides
-  while (tid < width * height) {
-    grayData[tid] = matA[3 * tid] * 0.07 + matA[3 * tid + 1] * 0.72 + matA[3 * tid + 2] * 0.21;
-    if (grayData[tid] < 128) { // saturate to either 255 or 0 - for pixel testing
-      grayData[tid] = 255;
-    } else {
-      grayData[tid] = 0;
-    }
-    tid = tid + stride;
-  }
-}
 
 // MAIN FUNCTION
 //-----------------------------------------------------------------
