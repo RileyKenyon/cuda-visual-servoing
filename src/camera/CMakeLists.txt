@@ -5,7 +5,7 @@ add_library(camera_lib STATIC
 
 target_include_directories(camera_lib PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/camera/include>
+    $<INSTALL_INTERFACE:include/${PROJECT_NAME}/camera>
 )
 
 # Add dependencies for opencv
@@ -30,5 +30,5 @@ install(TARGETS camera_lib
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
+    PUBLIC_HEADER DESTINATION "include/${PROJECT_NAME}/camera"
 )
