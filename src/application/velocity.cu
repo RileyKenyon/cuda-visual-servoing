@@ -10,16 +10,6 @@
 #define Frames 120
 // GPU KERNELS
 //----------------------------------------------------------------
-__global__ void addArr(unsigned char *arrA, unsigned char *arrB, unsigned char *output, int width, int height) {
-  int tid, stride;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-  while (tid < width * height) {
-    output[tid] = arrA[tid] + arrB[tid];
-    tid = tid + stride;
-  }
-}
-
 __global__ void spacing(unsigned char *pixelData, int width, int height) {
   int tid, stride, difference;
   tid = blockIdx.x * blockDim.x + threadIdx.x;

@@ -40,4 +40,16 @@ __global__ void screenAllocate(const unsigned char *originalImage,
 /// @param threshold The threshold used for edge finding
 __global__ void edgeFind(const unsigned char *grayData, unsigned char *edge, int width, int height, int threshold);
 
+/// @brief Add two arrays
+/// @param[in] arrA The first image
+/// @param[in] arrB The second image
+/// @param[out] output The sum of the two images
+/// @param width The height of the image
+/// @param height The width of the image
+__global__ void addArr(const unsigned char *arrA,
+                       const unsigned char *arrB,
+                       unsigned char *output,
+                       int width,
+                       int height);
+
 #endif // IMGPROC_HPP

@@ -69,3 +69,16 @@ __global__ void edgeFind(const unsigned char *grayData,
     tid = tid + stride;
   }
 }
+
+__global__ void addArr(const unsigned char *arrA,
+                       const unsigned char *arrB,
+                       unsigned char *output,
+                       int width,
+                       int height) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  int stride = blockDim.x * gridDim.x;
+  while (tid < width * height) {
+    output[tid] = arrA[tid] + arrB[tid];
+    tid = tid + stride;
+  }
+}
