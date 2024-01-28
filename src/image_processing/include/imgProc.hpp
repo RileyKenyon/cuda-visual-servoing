@@ -52,4 +52,21 @@ __global__ void addArr(const unsigned char *arrA,
                        int width,
                        int height);
 
+/// @brief Add spacing to the input image
+/// @param[in] pixelData input pixel data
+/// @param[out] difference difference to the input
+/// @param[out] count counter
+/// @param width Width of the image
+/// @param height Height of the image
+__global__ void spacing(const unsigned char *pixelData,
+                        unsigned int *difference,
+                        unsigned int *count,
+                        unsigned int width,
+                        int height);
+
+/// @brief Add spacing to the input image
+/// @param[in] pixelData input pixel data
+/// @param width Width of the image
+/// @param height Height of the image
+__global__ void spacing(const unsigned char *pixelData, int width, int height);
 #endif // IMGPROC_HPP

@@ -82,3 +82,71 @@ __global__ void addArr(const unsigned char *arrA,
     tid = tid + stride;
   }
 }
+
+__global__ void spacing(const unsigned char *pixelData,
+                        unsigned int *difference,
+                        unsigned int *count,
+                        unsigned int width,
+                        int height) {
+  // extern__shared__int difference[];
+  // extern__shared__int count;
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  int stride = blockDim.x * gridDim.x;
+  if (tid < width * height) {
+    if (pixelData[tid] == 255) {
+      int init = tid;
+      int i = init + 10 * width; // start looking 10 pixels down from current position
+      while (i < width * height && i < init + width * 50) {
+        if (pixelData[i] == 255) {
+          difference[tid] = (i - init) / width;
+          count[tid] = 1;
+          break;
+        } else {
+          difference[tid] = 0;
+          count[tid] = 0;
+        }
+        i = i + width;
+      }
+    } else {
+      difference[tid] = 0;
+      count[tid] = 0;
+    }
+    /**
+    __syncThreads();
+    //reduction for sum
+    for (unsigned int s = 1; s < blockDim.x; s*=2){
+      int index = 2*s*tid;
+      if (index < blockDim.x){
+        difference[index] += difference[index+s];
+      }
+      __syncTreads();
+    }
+    if (tid ==0)
+    printf("%d__%d  ",
+    }
+    **/
+  }
+}
+
+__global__ void spacing(const unsigned char *pixelData, int width, int height) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  int stride = blockDim.x * gridDim.x;
+  if (tid < width * height) {
+    if (pixelData[tid] == 255) {
+      int init = tid;
+      tid = init + 10 * width;
+      // looking below by up to 20 pixels
+      while (tid < width * height && tid < init + width * 50) {
+        if (255 - pixelData[tid] == 0) {
+          int difference = (tid - init) / width;
+          printf("%d  ", difference);
+          break;
+        }
+        tid = tid + width;
+        difference = 0;
+      }
+    } else {
+      difference = 0;
+    }
+  }
+}
