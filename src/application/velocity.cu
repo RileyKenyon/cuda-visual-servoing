@@ -21,24 +21,26 @@ int main(int argc, char const *argv[]) {
   //-------------------------------------------------------------------
   // Get initial image and print
   cv::Mat img;
-  if (arc == 2) {
+  cv::VideoCapture *cap = nullptr;
+  if (argc == 2) {
     std::string fname = argv[1];
-    if (fname.ends_with(".avi")) { // c++20
-      cv::VideoCapture cap(fname);
-      if (!cap.isOpened()) {
-        std::runtime_error("Error getting Stream")
+    if (fname.substr(fname.size() - 4, fname.size()) == ".avi") {
+      cap = new cv::VideoCapture(fname);
+      if (!cap->isOpened()) {
+        std::runtime_error("Error getting Stream");
       }
-      cap >> img;
-    } else if (fname.ends_with(".jpeg")) {
+      *cap >> img;
+    } else if (fname.substr(fname.size() - 5, fname.size()) == ".jpeg") {
       img = cv::imread(fname);
     }
   }
+
   if (img.empty()) {
-    cv::VideoCapture cap(1); // webcam
-    if (!cap.isOpened()) {
-      std::runtime_error("Error getting Stream")
+    cap = new cv::VideoCapture(1); // webcam
+    if (!cap->isOpened()) {
+      std::runtime_error("Error getting Stream");
     }
-    cap >> img;
+    *cap >> img;
   }
   cv::imshow("original", img);
   cv::waitKey(0);
@@ -109,7 +111,9 @@ int main(int argc, char const *argv[]) {
     cudaEventRecord(start);
     for (int j = 0; j < Frames; j++) {
       // capture and calculations
-      cap >> img;
+      if (cap != nullptr) {
+        *cap >> img;
+      }
       cudaMemcpy(matA,
                  img.data,
                  imageWidth * imageHeight * 3 * sizeof(unsigned char),
@@ -132,7 +136,7 @@ int main(int argc, char const *argv[]) {
       // saving
       // cv::Mat videoFrameGray(cv::Size(width,height),CV_8UC3);
       cv::Mat videoFrameGray;
-      cv::cvtColor(build, videoFrameGray, CV_GRAY2BGR); // 3 array of grayscale for saving to file
+      cv::cvtColor(build, videoFrameGray, cv::COLOR_GRAY2BGR); // 3 array of grayscale for saving to file
       // cv::imshow("savingExample",videoFrameGray);
       // c = cv::waitKey(0);
       writer.write(videoFrameGray); // write to video file
@@ -157,4 +161,8 @@ int main(int argc, char const *argv[]) {
   cudaFree(edge);
   cudaFree(prevArr);
   cudaFree(output);
+  if (cap != nullptr) {
+    delete cap;
+    cap = nullptr;
+  }
 }

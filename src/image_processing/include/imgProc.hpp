@@ -38,7 +38,11 @@ __global__ void screenAllocate(const unsigned char *originalImage,
 /// @param width Width of the image
 /// @param height Height of the image
 /// @param threshold The threshold used for edge finding
-__global__ void edgeFind(const unsigned char *grayData, unsigned char *edge, int width, int height, int threshold);
+__global__ void edgeFind(const unsigned char *grayData,
+                         unsigned char *edge,
+                         int width,
+                         int height,
+                         int threshold = 140);
 
 /// @brief Add two arrays
 /// @param[in] arrA The first image

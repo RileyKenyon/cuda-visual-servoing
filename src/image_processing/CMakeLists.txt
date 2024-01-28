@@ -1,6 +1,6 @@
 # Add library for image processing
 add_library(image_processing src/imgProc.cu)
-add_library(VServo::image_processing ALIAS image_processing)
+add_library(vservo::image_processing ALIAS image_processing)
 
 # Mandate any target linking needs to be compiled with -std=c++11
 target_compile_features(image_processing PUBLIC cxx_std_11)

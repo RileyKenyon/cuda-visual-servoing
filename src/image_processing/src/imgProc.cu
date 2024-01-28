@@ -50,11 +50,7 @@ __global__ void screenAllocate(const unsigned char *originalImage,
   }
 }
 
-__global__ void edgeFind(const unsigned char *grayData,
-                         unsigned char *edge,
-                         int width,
-                         int height,
-                         int threshold = 140) {
+__global__ void edgeFind(const unsigned char *grayData, unsigned char *edge, int width, int height, int threshold) {
   int tid = blockIdx.x * blockDim.x + threadIdx.x;
   int stride = blockDim.x * gridDim.x;
   while (tid < width * height) {

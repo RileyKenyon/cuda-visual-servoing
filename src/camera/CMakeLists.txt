@@ -1,5 +1,5 @@
 # Add Camera Library
-add_library(camera STATIC
+add_library(camera
     src/camera.cpp
 )
 

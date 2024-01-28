@@ -175,7 +175,7 @@ int main() {
       // saving
       // cv::Mat videoFrameGray(cv::Size(width,height),CV_8UC3);
       cv::Mat videoFrameGray;
-      cv::cvtColor(build, videoFrameGray, CV_GRAY2BGR); // 3 array of grayscale for saving to file
+      cv::cvtColor(build, videoFrameGray, cv::COLOR_GRAY2BGR); // 3 array of grayscale for saving to file
       // cv::imshow("savingExample",videoFrameGray);
 
       for (int i = 0; i < width * height; i++) {
