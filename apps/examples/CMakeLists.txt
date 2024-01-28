@@ -10,7 +10,7 @@ target_include_directories(CameraApp
 )
 
 # Link example to the camera library
-target_link_libraries(CameraApp PUBLIC cvs::camera_lib opencv_highgui)
+target_link_libraries(CameraApp PUBLIC cvs::camera opencv_highgui)
 
 # Request that CameraApp be built with -std=c++11
 # As this is a public compile feature anything that links to CameraApp

@@ -14,8 +14,7 @@ int main(int argc, char *argv[]) {
     cam = new camera::GenericCamera();
   } else {
     // report out the version
-    std::cout << argv[0] << " Version " << VisualServoing_VERSION_MAJOR << "." << VisualServoing_VERSION_MINOR
-              << std::endl;
+    std::cout << argv[0] << " Version " << CVS_VERSION_MAJOR << "." << CVS_VERSION_MINOR << std::endl;
     std::cout << "Usage: " << argv[0] << " number" << std::endl;
     return is_errors::ARG_ERR;
   }

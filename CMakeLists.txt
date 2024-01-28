@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-project(VisualServoing LANGUAGES CXX VERSION 1.0)
+project(CVS 
+    VERSION 1.0
+    LANGUAGES CXX 
+    DESCRIPTION "Library for visual servoing accelerated with CUDA")
 
 include(GNUInstallDirs)
 
@@ -19,42 +22,10 @@ endif()
 # Find OpenCV
 find_package(OpenCV REQUIRED)
 
-# Configure version file using the project version
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.h.in"
-    "${CMAKE_CURRENT_SOURCE_DIR}/include/config.h"
-)
-
-add_library(AppConfig INTERFACE)
-add_library(cvs::AppConfig ALIAS AppConfig)
-
-# Set public headers
-set(CONFIG_HEADERS
-    include/config.h
-    include/errors.h
-)
-
-target_include_directories(AppConfig INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-
-set_target_properties(AppConfig PROPERTIES
-    PUBLIC_HEADER "${CONFIG_HEADERS}"
-)
-
-install(TARGETS AppConfig
-    EXPORT ${PROJECT_NAME}Targets
-    LIBRARY DESTINATION  lib
-    ARCHIVE DESTINATION  lib
-    RUNTIME DESTINATION  bin
-    INCLUDES DESTINATION include
-)
-
 # Add subdirectories
+add_subdirectory(src/config)
 add_subdirectory(src/camera)
-add_subdirectory(examples)
-
+add_subdirectory(apps/examples)
 
 # Export
 include(CMakePackageConfigHelpers)
@@ -71,7 +42,7 @@ install(EXPORT ${PROJECT_NAME}Targets
 )
 
 # Configure and install package finding
-configure_file(cmake/VisualServoingConfig.cmake.in VisualServoingConfig.cmake @ONLY)
+configure_file(cmake/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
         DESTINATION lib/cmake/${PROJECT_NAME}

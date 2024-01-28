@@ -1,0 +1,3 @@
+// define the version
+#define CVS_VERSION_MAJOR @CVS_VERSION_MAJOR@
+#define CVS_VERSION_MINOR @CVS_VERSION_MINOR@

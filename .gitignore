@@ -4,4 +4,4 @@
 build
 install
 test_package
-include/config.h
+**/config.h
