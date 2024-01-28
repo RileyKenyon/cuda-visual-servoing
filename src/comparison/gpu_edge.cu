@@ -11,23 +11,6 @@
 
 // GPU KERNELS
 //----------------------------------------------------------------
-__global__ void edgeFind(unsigned char *grayData, unsigned char *edge, int width, int height) {
-  int tid, stride;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-
-  while (tid < width * height) {
-    if (tid > 2 * width) {
-      if (grayData[tid] > 150 && grayData[tid - width] < 150 && grayData[tid - 2 * width] < 150 &&
-          grayData[tid - 2] > 150 && grayData[tid - 1] > 150) {
-        edge[tid] = 255; // set to white
-      } else {
-        edge[tid] = 0;
-      }
-    }
-    tid = tid + stride;
-  }
-}
 // MAIN FUNCTION
 //-----------------------------------------------------------------
 // using namespace cv;

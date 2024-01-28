@@ -32,4 +32,12 @@ __global__ void screenAllocate(const unsigned char *originalImage,
                                const int *imageInfo,
                                const int *screenInfo);
 
+/// @brief Find the edge of the grayscale image
+/// @param[in] grayData Grayscale image
+/// @param[out] edge The edge detection
+/// @param width Width of the image
+/// @param height Height of the image
+/// @param threshold The threshold used for edge finding
+__global__ void edgeFind(const unsigned char *grayData, unsigned char *edge, int width, int height, int threshold);
+
 #endif // IMGPROC_HPP

@@ -28,10 +28,10 @@ __global__ void gpu_grayscale(const unsigned char *mat, unsigned char *matG, int
   }
 }
 
-__global__ void screenAllocate(unsigned char *originalImage,
+__global__ void screenAllocate(const unsigned char *originalImage,
                                unsigned char *screenImage,
-                               int *imageInfo,
-                               int *screenInfo) {
+                               const int *imageInfo,
+                               const int *screenInfo) {
   // Distance between array elements (i,j)[0] to (i,j)[1] is 1 not width*height
   // thread ID
   int imageWidth = imageInfo[0];
@@ -46,6 +46,26 @@ __global__ void screenAllocate(unsigned char *originalImage,
   while (tid < screenWidth * screenHeight) {
     index = imageWidth * (screenY + tid / screenWidth) + screenX + (tid - screenWidth * (tid / screenWidth));
     screenImage[tid] = originalImage[index];
+    tid = tid + stride;
+  }
+}
+
+__global__ void edgeFind(const unsigned char *grayData,
+                         unsigned char *edge,
+                         int width,
+                         int height,
+                         int threshold = 140) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x;
+  int stride = blockDim.x * gridDim.x;
+  while (tid < width * height) {
+    if (tid > 3 * width) {
+      if (grayData[tid] > threshold && grayData[tid - width] < threshold && grayData[tid - width - 1] < threshold &&
+          grayData[tid - width + 1] < threshold && grayData[tid - 1] > threshold) { // probably easier way to do this
+        edge[tid] = 255;                                                            // set to white
+      } else {
+        edge[tid] = 0;
+      }
+    }
     tid = tid + stride;
   }
 }

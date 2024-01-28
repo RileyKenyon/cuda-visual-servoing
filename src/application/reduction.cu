@@ -11,22 +11,6 @@
 #define LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 // GPU KERNELS
 //----------------------------------------------------------------
-__global__ void edgeFind(unsigned char *grayData, unsigned char *edge, int width, int height) {
-  int tid, stride;
-  tid = blockIdx.x * blockDim.x + threadIdx.x;
-  stride = blockDim.x * gridDim.x;
-  while (tid < width * height) {
-    if (tid > 2 * width) {
-      if (grayData[tid] > 150 && grayData[tid - width] < 150 && grayData[tid - 2 * width] < 150 &&
-          grayData[tid - 2] > 150 && grayData[tid - 1] > 150) { // probably easier way to do this
-        edge[tid] = 255;                                        // set to white
-      } else {
-        edge[tid] = 0;
-      }
-    }
-    tid = tid + stride;
-  }
-}
 
 __global__ void addArr(unsigned char *arrA, unsigned char *arrB, unsigned char *output, int width, int height) {
   int tid, stride;
