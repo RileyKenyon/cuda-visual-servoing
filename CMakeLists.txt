@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
-project(CVS 
+project(VServo 
     VERSION 1.0
     LANGUAGES CXX 
     DESCRIPTION "Library for visual servoing accelerated with CUDA")
@@ -38,7 +38,7 @@ write_basic_package_version_file(
 
 install(EXPORT ${PROJECT_NAME}Targets
         FILE ${PROJECT_NAME}Targets.cmake
-        NAMESPACE cvs::
+        NAMESPACE vservo::
         DESTINATION lib/cmake/${PROJECT_NAME}
 )
 

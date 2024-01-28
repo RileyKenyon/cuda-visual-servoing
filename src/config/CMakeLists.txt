@@ -5,7 +5,7 @@ configure_file(
 )
 
 add_library(AppConfig INTERFACE)
-add_library(cvs::AppConfig ALIAS AppConfig)
+add_library(vservo::AppConfig ALIAS AppConfig)
 
 # Set public headers
 set(CONFIG_HEADERS

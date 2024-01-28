@@ -9,7 +9,7 @@ target_include_directories(camera PUBLIC
 )
 
 # Add dependencies for opencv
-target_link_libraries(camera PUBLIC opencv_core cvs::AppConfig)
+target_link_libraries(camera PUBLIC opencv_core vservo::AppConfig)
 
 # Request that cameralib be built with -std=c++11
 # As this is a public compile feature anything that links to cameralib
@@ -17,7 +17,7 @@ target_link_libraries(camera PUBLIC opencv_core cvs::AppConfig)
 target_compile_features(camera PUBLIC cxx_std_11)
 
 # Add alias for building in source to look equivalent to using install
-add_library(cvs::camera ALIAS camera)
+add_library(vservo::camera ALIAS camera)
 
 set_target_properties(camera
     PROPERTIES

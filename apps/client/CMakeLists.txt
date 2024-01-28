@@ -3,7 +3,7 @@ project(TestApp
       VERSION 0.1
       DESCRIPTION "Example usage of library")
 
-find_package(VisualServoing REQUIRED)
+find_package(VServo REQUIRED)
 
 # Target
 add_executable(CameraApp
@@ -17,7 +17,7 @@ target_include_directories(CameraApp
 )
 
 # Link example to the camera library
-target_link_libraries(CameraApp PUBLIC cvs::camera opencv_highgui)
+target_link_libraries(CameraApp PUBLIC vservo::camera opencv_highgui)
 
 # Request that CameraApp be built with -std=c++11
 # As this is a public compile feature anything that links to CameraApp
