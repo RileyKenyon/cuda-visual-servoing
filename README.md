@@ -2,7 +2,16 @@
 Spring 2019 Independent study with Shalom Ruben for game automation using Nvidia Jetson Nano. 
 
 What is [visual servoing](https://en.wikipedia.org/wiki/Visual_servoing)?
-> **Visual servoing**, also known as vision-based robot control and abbreviated VS, is a technique which uses feedback information extracted from a vision sensor (visual feedback]) to control the motion of a robot. 
+> **Visual servoing**, also known as vision-based robot control and abbreviated VS, is a technique which uses feedback information extracted from a vision sensor (visual feedback]) to control the motion of a robot.
+
+
+## Running
+Examples running the main application
+```bash
+./Main -i media/pineapple.jpeg -o media/output/test_%02d.jpeg
+./Main -i media/example.avi -o media/output/video.avi
+```
+
 ## Setup
 To build all targets, create a build directory and use cmake to configure and build the targets:
 ```

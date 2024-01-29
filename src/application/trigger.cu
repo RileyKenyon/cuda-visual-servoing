@@ -16,28 +16,23 @@ void drawCircle(cv::Mat img, cv::Point center) {
 // MAIN FUNCTION
 //-----------------------------------------------------------------
 // using namespace cv;
-int main() {
+int main(int argc, char const *argv[]) {
   // Initialize timer settings
   float calcTimer = 0;
   cudaEvent_t start, stop;
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
-  // float GPUtimer, CPUtimer;
 
-  // ORIGINAL IMAGE
-  //-------------------------------------------------------------------
-  // Get initial image and print
+  // Initialize capture source
   cv::Mat img;
-  // img = cv::imread("pineapple.jpeg");
-  cv::VideoCapture cap("Test1.avi");
-  // cv::VideoCapture cap("ColorTest.avi");
-  // cv::VideoCapture cap(1); // webcam
+  cv::VideoCapture cap = (argc == 2) ? cv::VideoCapture(argv[1]) : cv::VideoCapture(1);
   if (!cap.isOpened()) {
-    printf("Error getting Stream \n");
+    std::runtime_error("Error getting Stream");
   }
   cap >> img;
-  int imageWidth = img.cols;
-  int imageHeight = img.rows;
+
+  const int imageWidth = img.cols;
+  const int imageHeight = img.rows;
   // cv::imshow("original",img);
   // cv::waitKey(0);
   printf("Resolution: %d x %d \n", imageWidth, imageHeight);

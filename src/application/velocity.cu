@@ -6,8 +6,7 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
-#define NUM 10000
-#define Frames 120
+static constexpr unsigned int Frames = 120;
 static constexpr unsigned int numThreads = 1024; // good number for multiple of 32
 
 int main(int argc, char const *argv[]) {
@@ -17,31 +16,14 @@ int main(int argc, char const *argv[]) {
   cudaEventCreate(&start);
   cudaEventCreate(&stop);
 
-  // ORIGINAL IMAGE
-  //-------------------------------------------------------------------
-  // Get initial image and print
+  // Initialize capture source
   cv::Mat img;
-  cv::VideoCapture *cap = nullptr;
-  if (argc == 2) {
-    std::string fname = argv[1];
-    if (fname.substr(fname.size() - 4, fname.size()) == ".avi") {
-      cap = new cv::VideoCapture(fname);
-      if (!cap->isOpened()) {
-        std::runtime_error("Error getting Stream");
-      }
-      *cap >> img;
-    } else if (fname.substr(fname.size() - 5, fname.size()) == ".jpeg") {
-      img = cv::imread(fname);
-    }
+  auto cap = (argc == 2) ? cv::VideoCapture(argv[1]) : cv::VideoCapture(1);
+  if (!cap.isOpened()) {
+    std::runtime_error("Error getting Stream");
   }
+  cap >> img;
 
-  if (img.empty()) {
-    cap = new cv::VideoCapture(1); // webcam
-    if (!cap->isOpened()) {
-      std::runtime_error("Error getting Stream");
-    }
-    *cap >> img;
-  }
   cv::imshow("original", img);
   cv::waitKey(0);
 
@@ -111,9 +93,7 @@ int main(int argc, char const *argv[]) {
     cudaEventRecord(start);
     for (int j = 0; j < Frames; j++) {
       // capture and calculations
-      if (cap != nullptr) {
-        *cap >> img;
-      }
+      cap >> img;
       cudaMemcpy(matA,
                  img.data,
                  imageWidth * imageHeight * 3 * sizeof(unsigned char),
@@ -161,8 +141,4 @@ int main(int argc, char const *argv[]) {
   cudaFree(edge);
   cudaFree(prevArr);
   cudaFree(output);
-  if (cap != nullptr) {
-    delete cap;
-    cap = nullptr;
-  }
 }

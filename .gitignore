@@ -5,3 +5,4 @@ build
 install
 test_package
 **/config.h
+output
