@@ -1,5 +1,5 @@
 # Add library for image processing
-add_library(image_processing src/imgProc.cu)
+add_library(image_processing src/imgProc.cu src/visual_servo.cu)
 add_library(vservo::image_processing ALIAS image_processing)
 
 # Mandate any target linking needs to be compiled with -std=c++11
@@ -13,10 +13,12 @@ target_include_directories(image_processing PUBLIC
 target_link_libraries(image_processing PUBLIC 
     opencv_core 
     opencv_highgui
+    CUDA::cudart
 )
 
 set (IMAGE_PROCESSING_HEADERS
     include/imgProc.hpp
+    include/visual_servo.hpp
 )
 
 set_target_properties(image_processing

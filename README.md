@@ -69,3 +69,4 @@ References
 * https://catalog.ngc.nvidia.com/orgs/nvidia/containers/cuda/tags
 * https://compose-spec.io/
 * https://nvidia.github.io/libcudacxx/
+* https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__MEMORY.html

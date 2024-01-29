@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 project(VServo 
     VERSION 1.0
     LANGUAGES CXX 
@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Enable CUDA if available
 include(CheckLanguage)
 check_language(CUDA)
+find_package(CUDAToolkit REQUIRED)
 if (DEFINED CMAKE_CUDA_COMPILER)
     enable_language(CUDA)
 else()

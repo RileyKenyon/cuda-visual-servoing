@@ -6,6 +6,7 @@
 ///
 /// @date 2024-01-28
 ///-----------------------------------------------------------------------------
+#include "visual_servo.hpp"
 #include <memory>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
@@ -94,10 +95,10 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  // have the servo be agnostic of opencv?
-  // vservo::VisualServo vs;
-  // vs.setup(img);
-  // Set the framerate, number threads, screen size
+  // Setup visual servo
+  vservo::VisualServo vs(width, height, 3);
+  vs.set_threads(numThreads);
+  vs.report_fps(true);
 
   while (true) {
     // read
@@ -106,14 +107,18 @@ int main(int argc, char *argv[]) {
     }
 
     // processs
-    /// @todo add in the visual servoing
+    vs.process(img.data);
+    unsigned char *output;
+    vs.get_output(&output);
 
-    // write
-    if (nullptr != writer) {
-      writer->write(img);
+    // write to file
+    if (nullptr != writer && nullptr != output) {
+      cv::Mat outputGrayscale(cv::Size(width, height), CV_8UC1, output);
+      cv::Mat outputColor;
+      cv::cvtColor(outputGrayscale, outputColor, cv::COLOR_GRAY2BGR);
+      writer->write(outputColor);
     }
   }
-
   cap.release();
   return 0;
 }
