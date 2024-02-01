@@ -19,6 +19,7 @@ target_link_libraries(image_processing PUBLIC
 set (IMAGE_PROCESSING_HEADERS
     include/imgProc.hpp
     include/visual_servo.hpp
+    include/draw_utils.hpp
 )
 
 set_target_properties(image_processing
