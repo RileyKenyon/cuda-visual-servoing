@@ -28,8 +28,8 @@ add_subdirectory(src/config)
 add_subdirectory(src/camera)
 add_subdirectory(src/image_processing)
 
-add_subdirectory(src/application)
 add_subdirectory(apps/examples)
+add_subdirectory(apps/piano_tiles)
 
 # Export
 include(CMakePackageConfigHelpers)

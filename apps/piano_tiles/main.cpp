@@ -13,7 +13,7 @@
 #include <opencv2/videoio.hpp>
 #include <unistd.h>
 
-static constexpr unsigned int numThreads = 1024;
+static constexpr unsigned int kNumThreads = 1024;
 
 int main(int argc, char *argv[]) {
   bool cropImage = false;
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 
   // Setup visual servo
   vservo::VisualServo vs(width, height, 3);
-  vs.set_threads(numThreads);
+  vs.set_threads(kNumThreads);
   vs.report_fps(true);
 
   while (true) {
@@ -110,6 +110,17 @@ int main(int argc, char *argv[]) {
     vs.process(img.data);
     unsigned char *output;
     vs.get_output(&output);
+
+    // visualize
+    if (displayStream) {
+      cv::imshow("Preview", img);
+      c = cv::waitKey(1);
+      if (c == 'p') {
+        cv::imwrite("Preview_%02d.jpg", img);
+      } else if (c == 'q') {
+        break;
+      }
+    }
 
     // write to file
     if (nullptr != writer && nullptr != output) {
