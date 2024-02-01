@@ -30,6 +30,26 @@ __global__ void gpu_grayscale(const unsigned char *mat, unsigned char *matG, int
   }
 }
 
+__global__ void gpu_grayscale_saturate(const unsigned char *mat,
+                                       unsigned char *saturated,
+                                       int width,
+                                       int height,
+                                       int threshold) {
+  int tid = blockIdx.x * blockDim.x + threadIdx.x; // thread ID
+  int stride = blockDim.x * gridDim.x;             // stride lengths
+
+  // grayscale calculation with strides
+  while (tid < width * height) {
+    saturated[tid] = mat[3 * tid] * 0.07 + mat[3 * tid + 1] * 0.72 + mat[3 * tid + 2] * 0.21;
+    if (saturated[tid] > threshold) {
+      saturated[tid] = 255;
+    } else {
+      saturated[tid] = 0;
+    }
+    tid = tid + stride;
+  }
+}
+
 __global__ void screenAllocate(const unsigned char *originalImage,
                                unsigned char *screenImage,
                                const int *imageInfo,

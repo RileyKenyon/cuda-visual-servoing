@@ -24,6 +24,18 @@ void convert_grayscale_cpu(const cv::Mat *img, cv::Mat *grayscale);
 /// @param height Height of the image
 __global__ void gpu_grayscale(const unsigned char *matA, unsigned char *matG, int width, int height);
 
+/// @brief Convert image to saturated (binary)
+/// @param mat RGB image
+/// @param saturated Saturated image
+/// @param width Width of the image
+/// @param height Height of the image
+/// @param threshold Saturation threshold (0, 255)
+__global__ void gpu_grayscale_saturate(const unsigned char *mat,
+                                       unsigned char *saturated,
+                                       int width,
+                                       int height,
+                                       int threshold);
+
 /// @brief Allocate the screen
 /// @param[in] originalImage The original image
 /// @param[out] screenImage The output screen
