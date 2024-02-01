@@ -9,6 +9,7 @@
 #ifndef VISUAL_SERVO_HPP
 #define VISUAL_SERVO_HPP
 #include <cuda_runtime_api.h>
+#include <string>
 
 namespace vservo {
 class VisualServo {
@@ -22,7 +23,14 @@ public:
 
 private:
   void get_framerate(); // helper to report on framerate
-  unsigned int numThreads = 1024;
+  // void middle(unsigned char **imageIn, unsigned char **imageOut);
+  // void pixel(unsigned char **imageIn, unsigned char **imageOut);
+  // void reduction(unsigned char **imageIn, unsigned char **imageOut);
+  // void trigger(unsigned char **imageIn, unsigned char **imageOut);
+  // void velocity(unsigned char **imageIn, unsigned char **imageOut);
+  double get_screen_velocity();
+  void write_to_file(const std::string &filename, const unsigned char *lineData, int width);
+  unsigned int kNumThreads = 1024;
   unsigned int numBlocks;
   unsigned int imageWidth;
   unsigned int imageHeight;
