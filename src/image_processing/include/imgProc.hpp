@@ -10,6 +10,8 @@
 #define IMGPROC_HPP
 #include <opencv2/highgui/highgui.hpp>
 
+namespace vservo {
+
 /// @brief Convert image to grayscale using the CPU
 /// @param[in] img RGB image
 /// @param[out] grayscale Grayscale image
@@ -80,4 +82,5 @@ __global__ void spacing(const unsigned char *pixelData, int width, int height);
 /// @param height Height of the image
 __global__ void dilate(unsigned char *image, int width, int height);
 
+} // namespace vservo
 #endif // IMGPROC_HPP

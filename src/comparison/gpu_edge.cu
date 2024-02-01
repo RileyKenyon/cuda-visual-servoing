@@ -80,10 +80,10 @@ int main() {
                  img.data,
                  width * height * 3 * sizeof(unsigned char),
                  cudaMemcpyHostToDevice); // NEED THIS LINE FOR COPYING ARRAY
-      gpu_grayscale<<<numBlocks, numThreads>>>(matA, grayData, width, height);
+      vservo::gpu_grayscale<<<numBlocks, numThreads>>>(matA, grayData, width, height);
       cudaDeviceSynchronize(); // sync threads and transfer memory
       // Edge Find
-      edgeFind<<<numBlocks, numThreads>>>(grayData, edge, width, height);
+      vservo::edgeFind<<<numBlocks, numThreads>>>(grayData, edge, width, height);
       cudaDeviceSynchronize();
       cv::Mat build(cv::Size(width, height), CV_8UC1, edge);
       cv::Mat videoFrameGray; // 3 array of grayscale for saving to file

@@ -66,11 +66,11 @@ int main(int argc, char const *argv[]) {
              img.data,
              imageWidth * imageHeight * 3 * sizeof(unsigned char),
              cudaMemcpyHostToDevice); // FOR COPYING ARRAY
-  gpu_grayscale<<<numBlocksImage, numThreads>>>(matA, grayData, imageWidth, imageHeight);
+  vservo::gpu_grayscale<<<numBlocksImage, numThreads>>>(matA, grayData, imageWidth, imageHeight);
   cudaDeviceSynchronize();
-  screenAllocate<<<numBlocksScreen, numThreads>>>(grayData, screenData, imageInfo, screenInfo);
+  vservo::screenAllocate<<<numBlocksScreen, numThreads>>>(grayData, screenData, imageInfo, screenInfo);
   cudaDeviceSynchronize();
-  edgeFind<<<numBlocksScreen, numThreads>>>(screenData, prevArr, width, height);
+  vservo::edgeFind<<<numBlocksScreen, numThreads>>>(screenData, prevArr, width, height);
   cudaDeviceSynchronize();
   char c; // for waitkey
   cv::Mat test(cv::Size(width, height), CV_8UC1, screenData);
@@ -98,15 +98,15 @@ int main(int argc, char const *argv[]) {
                  img.data,
                  imageWidth * imageHeight * 3 * sizeof(unsigned char),
                  cudaMemcpyHostToDevice); // FOR COPYING ARRAY
-      gpu_grayscale<<<numBlocksImage, numThreads>>>(matA, grayData, imageWidth, imageHeight);
+      vservo::gpu_grayscale<<<numBlocksImage, numThreads>>>(matA, grayData, imageWidth, imageHeight);
       cudaDeviceSynchronize(); // sync threads and cpy mem
-      screenAllocate<<<numBlocksScreen, numThreads>>>(grayData, screenData, imageInfo, screenInfo);
+      vservo::screenAllocate<<<numBlocksScreen, numThreads>>>(grayData, screenData, imageInfo, screenInfo);
       cudaDeviceSynchronize();
-      edgeFind<<<numBlocksScreen, numThreads>>>(screenData, edge, width, height);
+      vservo::edgeFind<<<numBlocksScreen, numThreads>>>(screenData, edge, width, height);
       cudaDeviceSynchronize();
-      addArr<<<numBlocksScreen, numThreads>>>(edge, prevArr, output, width, height);
+      vservo::addArr<<<numBlocksScreen, numThreads>>>(edge, prevArr, output, width, height);
       cudaDeviceSynchronize();
-      spacing<<<numBlocksScreen, numThreads>>>(output, width, height);
+      vservo::spacing<<<numBlocksScreen, numThreads>>>(output, width, height);
       cudaDeviceSynchronize();
       // std::cout << screenData;
       cv::Mat build(cv::Size(width, height), CV_8UC1, output);

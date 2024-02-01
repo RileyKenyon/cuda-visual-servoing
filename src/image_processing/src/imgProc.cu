@@ -10,6 +10,8 @@
 // #include <cuda.h>
 // #include <cuda_runtime_api.h>
 
+namespace vservo {
+
 void convert_grayscale_cpu(cv::Mat *img, cv::Mat *grayscale) {
   for (int i = 0; i < img->rows * img->cols; i++) {
     grayscale[i] = img->data[3 * i] * 0.07 + img->data[3 * i + 1] * 0.72 + img->data[3 * i + 2] * 0.21;
@@ -163,3 +165,5 @@ __global__ void dilate(unsigned char *image, int width, int height) {
     tid = tid + stride;
   }
 }
+
+} // namespace vservo

@@ -77,7 +77,7 @@ int main() {
       for (int j = 0; j< Frames; j++){
         cap >> img;
         cudaMemcpy(matA, img.data, width*height*3* sizeof(unsigned char), cudaMemcpyHostToDevice); // NEED THIS LINE FOR
-  COPYING ARRAY gpu_grayscale<<<numBlocks,numThreads>>>(matA,grayData,width,height); cudaDeviceSynchronize(); // sync
+  COPYING ARRAY vservo::gpu_grayscale<<<numBlocks,numThreads>>>(matA,grayData,width,height); cudaDeviceSynchronize(); // sync
   threads and transfer memory
       // Show grayscale image
         //cv::Mat outputGPU(cv::Size(width,height),CV_8UC1,grayData);

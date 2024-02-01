@@ -34,8 +34,8 @@ bool VisualServo::process(unsigned char *data) {
   bool retval = false;
   if (nullptr != data) {
     cudaMemcpy(input, data, imageWidth * imageHeight * imageLayers * sizeof(unsigned char), cudaMemcpyHostToDevice);
-    gpu_grayscale<<<numBlocks, numThreads>>>(input, grayscale, imageWidth, imageHeight);
-    edgeFind<<<numBlocks, numThreads>>>(grayscale, output, imageWidth, imageHeight);
+    vservo::gpu_grayscale<<<numBlocks, numThreads>>>(input, grayscale, imageWidth, imageHeight);
+    vservo::edgeFind<<<numBlocks, numThreads>>>(grayscale, output, imageWidth, imageHeight);
     get_framerate();
     retval = true;
   }
