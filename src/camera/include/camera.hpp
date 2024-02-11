@@ -1,5 +1,13 @@
-#ifndef TEGRA_CAMERA_H_
-#define TEGRA_CAMERA_H_
+///-----------------------------------------------------------------------------
+/// @file camera.hpp
+///
+/// @author Riley Kenyon (rike2277@colorado.edu)
+/// @brief Video Capture using the tegra gstreamer pipeline
+///
+/// @date 2024-02-11
+///-----------------------------------------------------------------------------
+#ifndef CAMERA_HPP
+#define CAMERA_HPP
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <opencv2/videoio.hpp>
@@ -8,18 +16,20 @@
 namespace camera {
 class GenericCamera : public cv::VideoCapture {
 public:
+  /// @brief Constructor
   GenericCamera();
+
+  /// @brief Destructor
   ~GenericCamera();
 
 private:
-  // Methods
+  /// @brief Construct a gstreamer pipeline string
+  /// @return string of the pipeline
   std::string get_tegra_gst_pipeline_str();
-
-  // Member Variables
-  const uint32_t mu32_captureWidth = 1920;
-  const uint32_t mu32_captureHeight = 1080;
-  const uint8_t mu8_captureFPS = 30;
+  const uint32_t mu32_captureWidth = 1920;  ///< Default capture width
+  const uint32_t mu32_captureHeight = 1080; ///< Default capture height
+  const uint8_t mu8_captureFps = 30;        ///< Default capture fps
 };
 } // namespace camera
 
-#endif // TEGRA_CAMERA_H_
+#endif // CAMERA_HPP
