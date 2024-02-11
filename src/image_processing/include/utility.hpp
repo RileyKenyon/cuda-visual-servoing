@@ -51,6 +51,13 @@ void log_to_file(const std::string &fname, const unsigned int *data, int width, 
 /// @param offset offset of the input data
 void create_calibration_lines(unsigned int *data, int width, int height, int offset = 100);
 
+/// @brief Return a tegra gstreamer pipeline
+/// @param width width of the video
+/// @param height height of the video
+/// @param fps frames per second of the video
+/// @return gstreamer string to create video capture
+std::string get_tegra_gst_pipeline_str(int width = 1920, int height = 1080, int fps = 30);
+
 } // namespace vservo
 
 #endif // UTILITY_HPP

@@ -52,4 +52,12 @@ void create_calibration_lines(unsigned int *data, int width, int height, int off
   }
 }
 
+std::string get_tegra_gst_pipeline_str(int width, int height, int fps) {
+  return ("nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int)" + std::to_string(width) + ", height=(int)" +
+          std::to_string(height) + ",format=(string)NV12, \
+        framerate=(fraction)" +
+          std::to_string(fps) + "/1 ! nvvidconv ! video/x-raw, format=(string)BGRx \
+        ! videoconvert !  appsink");
+}
+
 } // namespace vservo

@@ -25,7 +25,6 @@ find_package(OpenCV REQUIRED)
 
 # Add subdirectories
 add_subdirectory(src/config)
-add_subdirectory(src/camera)
 add_subdirectory(src/image_processing)
 
 add_subdirectory(apps/examples)

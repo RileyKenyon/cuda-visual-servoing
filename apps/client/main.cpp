@@ -1,4 +1,3 @@
-#include "camera.hpp"
 #include "config.h"
 #include "errors.h"
 #include <opencv2/opencv.hpp>
@@ -6,17 +5,17 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-  camera::GenericCamera *cam = nullptr;
+  cv::VideoCapture *cam = nullptr;
   cv::Mat frameIn;
 
   // Parse input arguments
   if (argc < 2) {
-    cam = new camera::GenericCamera();
+    cam = new cv::VideoCapture(0);
   } else {
     // report out the version
     std::cout << argv[0] << " Version " << VSERVO_VERSION_MAJOR << "." << VSERVO_VERSION_MINOR << std::endl;
     std::cout << "Usage: " << argv[0] << " number" << std::endl;
-    return is_errors::ARG_ERR;
+    return vservo::ARG_ERR;
   }
 
   // Video Capture
@@ -41,5 +40,5 @@ int main(int argc, char *argv[]) {
     delete cam;
   }
 
-  return is_errors::NO_ERR;
+  return vservo::NO_ERR;
 }
