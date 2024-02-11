@@ -1,5 +1,5 @@
 # Add library for image processing
-add_library(image_processing src/image_processing.cu src/visual_servo.cu)
+add_library(image_processing src/image_processing.cu src/visual_servo.cu src/utility.cpp)
 add_library(vservo::image_processing ALIAS image_processing)
 
 # Mandate any target linking needs to be compiled with -std=c++11
@@ -19,7 +19,7 @@ target_link_libraries(image_processing PUBLIC
 set (IMAGE_PROCESSING_HEADERS
     include/image_processing.hpp
     include/visual_servo.hpp
-    include/draw_utils.hpp
+    include/utility.hpp
 )
 
 set_target_properties(image_processing
