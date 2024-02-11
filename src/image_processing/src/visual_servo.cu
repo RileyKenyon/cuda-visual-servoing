@@ -5,7 +5,7 @@
 /// @param height
 /// @param layers
 ///-----------------------------------------------------------------------------
-#include "imgProc.hpp"
+#include "image_processing.hpp"
 #include "visual_servo.hpp"
 #include <fstream>
 #include <iostream>

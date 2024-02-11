@@ -1,13 +1,13 @@
 ///-----------------------------------------------------------------------------
-/// @file imgProc.hpp
+/// @file image_processing.hpp
 ///
 /// @author Riley Kenyon (rike2277@colorado.edu)
-/// @brief
+/// @brief Declaration of image processing operations
 ///
 /// @date 2024-01-27
 ///-----------------------------------------------------------------------------
-#ifndef IMGPROC_HPP
-#define IMGPROC_HPP
+#ifndef IMAGE_PROCESSING_HPP
+#define IMAGE_PROCESSING_HPP
 #include <opencv2/highgui/highgui.hpp>
 
 namespace vservo {
@@ -95,4 +95,5 @@ __global__ void spacing(const unsigned char *pixelData, int width, int height);
 __global__ void dilate(unsigned char *image, int width, int height);
 
 } // namespace vservo
-#endif // IMGPROC_HPP
+
+#endif // IMAGE_PROCESSING_HPP

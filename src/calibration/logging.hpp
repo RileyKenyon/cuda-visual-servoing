@@ -14,10 +14,11 @@ void log_to_file(const std::string &fname, const unsigned int *data, int width, 
   std::ofstream dataFile;
   dataFile.open(fname);
   for (int k = 0; k < 3; k++) {
-    for (int j = 100 * (k + 1) * width; j < ((100 * (k + 1)) + 1) * width; j++) {
+    const int offset = 100;
+    for (int j = offset * (k + 1) * width; j < ((offset * (k + 1)) + 1) * width; j++) {
       int output = data[j] - '0';
       dataFile << output;
-      if (j != ((100 * (k + 1)) + 1) * width - 1) { // last element in row
+      if (j != ((offset * (k + 1)) + 1) * width - 1) { // last element in row
         dataFile << ",";
       }
       // data[j] = 0;

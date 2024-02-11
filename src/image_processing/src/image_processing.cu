@@ -1,12 +1,12 @@
 ///-----------------------------------------------------------------------------
-/// @file imgProc.cu
+/// @file image_processing.cu
 ///
 /// @author Riley Kenyon (rike2277@colorado.edu)
-/// @brief
+/// @brief Definition of image processing operations
 ///
 /// @date 2024-01-27
 ///-----------------------------------------------------------------------------
-#include "imgProc.hpp"
+#include "image_processing.hpp"
 // #include <cuda.h>
 // #include <cuda_runtime_api.h>
 
